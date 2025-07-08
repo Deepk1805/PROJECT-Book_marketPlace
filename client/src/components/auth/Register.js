@@ -55,6 +55,13 @@ const Register = () => {
     }
 
     try {
+      console.log('Attempting registration with:', {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address
+      });
+
       const res = await axios.post("/api/auth/register", {
         name: formData.name,
         email: formData.email,
@@ -62,10 +69,14 @@ const Register = () => {
         phone: formData.phone,
         address: formData.address,
       });
+
+      console.log('Registration successful:', res.data);
       localStorage.setItem('token', res.data.token);
       navigate('/books');
     } catch (err) {
-      setError(err.response?.data?.msg || 'Error registering user');
+      console.error('Registration error:', err);
+      console.error('Error response:', err.response);
+      setError(err.response?.data?.msg || err.response?.data?.errors?.[0]?.msg || 'Error registering user');
     }
   };
 

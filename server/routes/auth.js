@@ -15,7 +15,10 @@ router.post('/register', [
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, phone, address } = req.body;
+
+  // Debug logging
+  console.log('Registration attempt:', { name, email, phone, address });
 
   try {
     let user = await User.findOne({ email });
@@ -27,7 +30,9 @@ router.post('/register', [
     user = new User({
       name,
       email,
-      password
+      password,
+      phone,
+      address
     });
 
     await user.save();
