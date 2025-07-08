@@ -2,6 +2,8 @@
 
 A full-stack web application for buying and selling books. Built with React.js, Node.js, Express, and MongoDB.
 
+> **Latest Update**: User registration functionality has been fixed and improved with comprehensive error handling and validation.
+
 ## Features
 
 - User authentication (register/login)
