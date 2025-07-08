@@ -17,9 +17,6 @@ router.post('/register', [
 
   const { name, email, password, phone, address } = req.body;
 
-  // Debug logging
-  console.log('Registration attempt:', { name, email, phone, address });
-
   try {
     let user = await User.findOne({ email });
 
