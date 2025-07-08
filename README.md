@@ -40,12 +40,33 @@ cd ../client
 npm install
 ```
 
-4. Create a `.env` file in the server directory with the following variables:
+4. Set up environment variables:
+
+```bash
+cd server
+cp .env.example .env
+```
+
+Edit the `.env` file with your configuration:
 
 ```
 MONGODB_URI=mongodb://localhost:27017/bookmarketplace
-JWT_SECRET=your_jwt_secret
-PORT=5000
+JWT_SECRET=your_jwt_secret_key_here_change_in_production
+PORT=5001
+STRIPE_SECRET_KEY=your_stripe_secret_key_here
+```
+
+5. Make sure MongoDB is running:
+
+```bash
+# On macOS with Homebrew
+brew services start mongodb-community
+
+# On Ubuntu/Debian
+sudo systemctl start mongod
+
+# On Windows
+net start MongoDB
 ```
 
 ## Running the Application
@@ -59,6 +80,8 @@ cd server
 npm start
 ```
 
+The server will run on `http://localhost:5001`
+
 3. In a new terminal, start the client:
 
 ```bash
@@ -66,7 +89,9 @@ cd client
 npm start
 ```
 
-4. Open your browser and navigate to `http://localhost:3000`
+The client will run on `http://localhost:3000` (or `http://localhost:3001` if 3000 is busy)
+
+4. Open your browser and navigate to the client URL displayed in the terminal
 
 ## API Endpoints
 
