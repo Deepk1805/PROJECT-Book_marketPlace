@@ -29,7 +29,7 @@ const BookDetail = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/books/${id}`);
+        const res = await axios.get(`/api/books/${id}`);
         setBook(res.data);
         setLoading(false);
       } catch (err) {

@@ -29,7 +29,7 @@ const OrderConfirmation = () => {
       try {
         const token = localStorage.getItem('token');
         const res = await axios.get(
-          `http://localhost:5000/api/payment/order/${orderId}`,
+          `/api/payment/order/${orderId}`,
           {
             headers: {
               'x-auth-token': token,

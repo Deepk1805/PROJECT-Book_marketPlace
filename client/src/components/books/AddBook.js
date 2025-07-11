@@ -47,10 +47,10 @@ const AddBook = () => {
         },
       };
 
-      await axios.post('http://localhost:5000/api/books', formData, config);
+      await axios.post('/api/books', formData, config);
       navigate('/books');
     } catch (err) {
-      setError(err.response?.data?.msg || 'Error adding book');
+      setError(err.response?.data?.msg || err.response?.data?.errors?.[0]?.msg || 'Error adding book');
     }
   };
 

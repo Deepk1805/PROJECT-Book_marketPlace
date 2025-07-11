@@ -28,13 +28,13 @@ const Checkout = () => {
     const fetchBookAndCreatePaymentIntent = async () => {
       try {
         // Fetch book details
-        const bookRes = await axios.get(`http://localhost:5000/api/books/${bookId}`);
+        const bookRes = await axios.get(`/api/books/${bookId}`);
         setBook(bookRes.data);
 
         // Create payment intent
         const token = localStorage.getItem('token');
         const paymentRes = await axios.post(
-          'http://localhost:5000/api/payment/create-payment-intent',
+          '/api/payment/create-payment-intent',
           {
             bookId,
             shippingAddress: {} // Will be updated during checkout
