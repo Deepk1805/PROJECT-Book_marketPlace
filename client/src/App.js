@@ -8,6 +8,9 @@ import Register from './components/auth/Register';
 import BookList from './components/books/BookList';
 import BookDetail from './components/books/BookDetail';
 import AddBook from './components/books/AddBook';
+import Wishlist from './components/books/Wishlist';
+import ReadingList from './components/books/ReadingList';
+import UserProfile from './components/profile/UserProfile';
 import Checkout from './components/payment/Checkout';
 import OrderConfirmation from './components/payment/OrderConfirmation';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -56,6 +59,30 @@ function App() {
               element={
                 <PrivateRoute>
                   <OrderConfirmation />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/wishlist"
+              element={
+                <PrivateRoute>
+                  <Wishlist />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/reading-list"
+              element={
+                <PrivateRoute>
+                  <ReadingList />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <UserProfile />
                 </PrivateRoute>
               }
             />

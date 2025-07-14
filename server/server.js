@@ -24,6 +24,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/bookmarke
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/books', require('./routes/books'));
 app.use('/api/payment', require('./routes/payment'));
+app.use('/api/wishlist', require('./routes/wishlist'));
+app.use('/api/reading-list', require('./routes/readingList'));
+app.use('/api/profile', require('./routes/profile'));
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

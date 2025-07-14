@@ -27,8 +27,54 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
-    default: 'user'
+    enum: ['buyer', 'seller', 'admin', 'librarian', 'user'], // Keep 'user' for backward compatibility
+    default: 'buyer'
+  },
+  profile: {
+    bio: String,
+    avatar: String,
+    preferences: {
+      favoriteGenres: [String],
+      language: { type: String, default: 'en' },
+      notifications: {
+        email: { type: Boolean, default: true },
+        wishlistUpdates: { type: Boolean, default: true },
+        newBooks: { type: Boolean, default: false }
+      }
+    }
+  },
+  wishlist: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Book'
+  }],
+  readingList: [{
+    book: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Book'
+    },
+    status: {
+      type: String,
+      enum: ['want-to-read', 'currently-reading', 'read'],
+      default: 'want-to-read'
+    },
+    dateAdded: {
+      type: Date,
+      default: Date.now
+    },
+    dateStarted: Date,
+    dateFinished: Date,
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5
+    },
+    review: String
+  }],
+  sellerStats: {
+    totalSales: { type: Number, default: 0 },
+    totalRevenue: { type: Number, default: 0 },
+    rating: { type: Number, default: 0 },
+    reviewCount: { type: Number, default: 0 }
   }
 }, {
   timestamps: true

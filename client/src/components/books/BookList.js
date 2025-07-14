@@ -20,44 +20,77 @@ import {
 const BookList = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [condition, setCondition] = useState('');
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    total: 0
+  });
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const res = await axios.get('/api/books');
-        setBooks(res.data);
+        setLoading(true);
+        const params = new URLSearchParams();
+        if (search) params.append('search', search);
+        if (category) params.append('category', category);
+        if (condition) params.append('condition', condition);
+
+        const res = await axios.get(`/api/books?${params.toString()}`);
+
+        // Handle the new API response structure
+        if (res.data.books) {
+          setBooks(res.data.books);
+          setPagination({
+            currentPage: res.data.currentPage,
+            totalPages: res.data.totalPages,
+            total: res.data.total
+          });
+        } else {
+          // Fallback for old API structure
+          setBooks(res.data);
+        }
         setLoading(false);
+        setError('');
       } catch (err) {
         console.error('Error fetching books:', err);
+        setError('Error loading books. Please try again.');
         setLoading(false);
       }
     };
 
-    fetchBooks();
-  }, []);
+    // Debounce search to avoid too many API calls
+    const timeoutId = setTimeout(() => {
+      fetchBooks();
+    }, search ? 500 : 0);
 
-  const filteredBooks = books.filter((book) => {
-    const matchesSearch = book.title.toLowerCase().includes(search.toLowerCase()) ||
-      book.author.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = category ? book.category === category : true;
-    const matchesCondition = condition ? book.condition === condition : true;
+    return () => clearTimeout(timeoutId);
+  }, [search, category, condition]);
 
-    return matchesSearch && matchesCategory && matchesCondition;
-  });
+  // Server-side filtering is now handled by the API
 
   if (loading) {
     return (
-      <Container>
-        <Typography>Loading...</Typography>
+      <Container sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+        <Typography>Loading books...</Typography>
       </Container>
     );
   }
 
   return (
     <Container sx={{ py: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Browse Books
+      </Typography>
+
+      {error && (
+        <Box sx={{ mb: 2 }}>
+          <Typography color="error">{error}</Typography>
+        </Box>
+      )}
       <Box sx={{ mb: 4 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
@@ -105,8 +138,20 @@ const BookList = () => {
         </Grid>
       </Box>
 
-      <Grid container spacing={4}>
-        {filteredBooks.map((book) => (
+      {books.length === 0 && !loading ? (
+        <Box sx={{ textAlign: 'center', py: 4, width: '100%' }}>
+          <Typography variant="h6" color="text.secondary">
+            No books found
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {search || category || condition
+              ? 'Try adjusting your search filters'
+              : 'Be the first to list a book!'}
+          </Typography>
+        </Box>
+      ) : (
+        <Grid container spacing={4}>
+          {books.map((book) => (
           <Grid item key={book._id} xs={12} sm={6} md={4}>
             <Card>
               <CardMedia
@@ -142,7 +187,8 @@ const BookList = () => {
             </Card>
           </Grid>
         ))}
-      </Grid>
+        </Grid>
+      )}
     </Container>
   );
 };
